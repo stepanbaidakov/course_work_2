@@ -4,14 +4,16 @@ from abc import ABC, abstractmethod
 
 from config import DATA_DIR
 
+
 class BaseJSONSaver(ABC):
+    """Базовый класс для взаимодействия с api"""
 
     @abstractmethod
-    def add_vacancies(self, vacancies):
+    def add_vacancies_to_file(self, vacancies):
         pass
 
     @abstractmethod
-    def load_vacancies(self, url):
+    def get_vacancies_from_file(self, url):
         pass
 
     @abstractmethod
@@ -20,13 +22,14 @@ class BaseJSONSaver(ABC):
 
 
 class JSONSaver(BaseJSONSaver):
+    """Класс для работы с файлом"""
 
     file_name: str
 
-    def __init__(self, file_name="vacancies.json"):
+    def __init__(self, file_name: str ="vacancies.json"):
         self.__file_name = file_name
 
-    def add_vacancies(self, vacancies):
+    def add_vacancies_to_file(self, vacancies: list):
 
         try:
             with open(os.path.join(DATA_DIR, self.__file_name), "r", encoding="utf-8") as f:
@@ -42,24 +45,16 @@ class JSONSaver(BaseJSONSaver):
         with open(os.path.join(DATA_DIR, self.__file_name), "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-    def load_vacancies(self, url):
+    def get_vacancies_from_file(self, urls: list) -> list:
         with open(os.path.join(DATA_DIR, self.__file_name), "r", encoding="utf-8") as file:
-           data = json.load(file)
+            data = json.load(file)
         result = []
         for vacancy in data:
-            if url in vacancy["url"]:
-                result.append(vacancy)
+            for url in urls:
+                if url in vacancy["url"]:
+                    result.append(vacancy)
         return result
 
     def delete_vacancies(self):
         with open(os.path.join(DATA_DIR, self.__file_name), "w"):
             pass
-
-if __name__ == "__main__":
-
-    fw = JSONSaver("vacancies.json")
-    fw.add_vacancies([{'name': 'Инженер по тестированию', 'url': 'https://api.hh.ru/vacancies/126274858?host=hh.ru', 'salary': 0, 'requirements': 'Опыт работы с автотестами, в том числе написание и внедрение. Базовые знания bash, <highlighttext>python</highlighttext>. Базовые навыки работы с измерительным инструментов...'}
-])
-
-    print(fw.load_vacancies("https://api.hh.ru/vacancies/126274858?host=hh.ru"))
-    # fw.delete_vacancies()

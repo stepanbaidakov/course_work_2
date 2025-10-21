@@ -3,7 +3,7 @@ import requests
 
 
 class HhAPI(ABC):
-    """Класс для взаимодействия с API"""
+    """Базовый класс для взаимодействия с API"""
 
     @abstractmethod
     def __init__(self):
@@ -19,44 +19,29 @@ class HhAPI(ABC):
 
 
 class HhRu(HhAPI):
+    """Класс для взаимодействия с api"""
+
     def __init__(self):
         self.__url = "https://api.hh.ru/vacancies"
-        self.__params = {'text': '', 'page': 0, 'per_page': 100}
+        self.__params = {"text": "", "page": 0, "per_page": 100}
         self.__vacancies = []
 
-    def _connect_to_api(self, url, params):
+    def _connect_to_api(self, url: str, params: dict):
         return self.__connect_to_api(url, params)
 
-    def __connect_to_api(self, url, params):
+    def __connect_to_api(self, url: str, params: dict):
         response = requests.get(url, params)
         if response.status_code >= 400:
-            response.raise_for_status()
+            return response.raise_for_status()
         else:
             return response.json()
 
-    def get_vacancies(self, keyword, per_page=100):
-        self.__params['text'] = keyword
+    def get_vacancies(self, keyword: str, per_page: int =100) -> list[dict]:
+        self.__params["text"] = keyword
         self.__params["per_page"] = per_page
-        while self.__params.get('page') != 1:
-            response = self._connect_to_api(self.__url,self.__params)
+        while self.__params.get("page") != 1:
+            response = self._connect_to_api(self.__url, self.__params)
             data = response["items"]
             self.__vacancies.extend(data)
-            self.__params['page'] += 1
+            self.__params["page"] += 1
         return self.__vacancies
-
-
-if __name__ == "__main__":
-    hh = HhRu()
-    vacancies = hh._connect_to_api("https://api.hh.ru/vacancies", {'text': 'Python', 'page': 0, 'per_page': 1})
-    print(vacancies)
-    # for vac in vacancies:
-    #     print(vac)
-        # if vac.get("salary") is None:
-        #     print(0)
-        # else:
-        #     print(vac.get("salary").get("to"))
-    # response = requests.get("https://api.hh.ru")
-    # if response.status_code < 400:
-    #     print("Возникла ошибка")
-    # else:
-    #     print(response)
