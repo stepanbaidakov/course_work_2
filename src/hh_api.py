@@ -27,6 +27,8 @@ class HhRu(HhAPI):
         self.__vacancies = []
 
     def _connect_to_api(self, url: str, params: dict):
+        """Метод подключения к api"""
+
         return self.__connect_to_api(url, params)
 
     def __connect_to_api(self, url: str, params: dict):
@@ -37,6 +39,8 @@ class HhRu(HhAPI):
             return response.json()
 
     def get_vacancies(self, keyword: str, per_page: int =100) -> list[dict]:
+        """Метод получения вакансий в виде списка словарей"""
+
         self.__params["text"] = keyword
         self.__params["per_page"] = per_page
         while self.__params.get("page") != 1:

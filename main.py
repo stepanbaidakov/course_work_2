@@ -5,12 +5,11 @@ from src.file_worker import JSONSaver
 
 
 def main():
-    # search_query = input("Введите запрос по профессии: ")
-    # top_n = int(input("Введите количество вакансий для вывода в топ N: "))
-    # all_filter_words = input("Введите слова для фильтрации вакансий со строчной буквы: ").split(",")
-    search_query = "Python"
-    top_n = 2
-    all_filter_words = []
+    """Функция взаимодействия с пользователем"""
+
+    search_query = input("Введите запрос по профессии: ")
+    top_n = int(input("Введите количество вакансий для вывода в топ N: "))
+    all_filter_words = input("Введите слова для фильтрации вакансий со строчной буквы: ").split(",")
 
     filter_words_1 = "знания".split(",")
     all_filter_words.extend(filter_words_1)

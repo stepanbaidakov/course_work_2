@@ -23,6 +23,7 @@ class Vacancy:
 
     @classmethod
     def cast_to_object_list(cls, vacancies_dict: dict):
+        """Функция переобразует словарь в объекты класса Vacаncy"""
         if vacancies_dict.get("salary") is None:
             return cls(
                 vacancies_dict.get("name"),
@@ -103,12 +104,18 @@ class Vacancy:
             )
 
     def __lt__(self, other) -> int:
+        """Функция возвращает True если первый меньше второго"""
+
         if isinstance(other, Vacancy):
             return self.salary < other.salary
 
     def __gt__(self, other) -> int:
+        """Функция возвращает True если первый больше второго"""
+
         if isinstance(other, Vacancy):
             return self.salary > other.salary
 
     def to_json(self) -> dict:
+        """Функция приводит объект класса Vacancy к словарю"""
+
         return {"name": self.name, "url": self.url, "salary": self.salary, "requirements": self.requirement}

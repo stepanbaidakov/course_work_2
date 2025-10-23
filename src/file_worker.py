@@ -30,6 +30,7 @@ class JSONSaver(BaseJSONSaver):
         self.__file_name = file_name
 
     def add_vacancies_to_file(self, vacancies: list):
+        """Метод добавляет вакансии в файл"""
 
         try:
             with open(os.path.join(DATA_DIR, self.__file_name), "r", encoding="utf-8") as f:
@@ -46,6 +47,8 @@ class JSONSaver(BaseJSONSaver):
             json.dump(data, file, ensure_ascii=False, indent=4)
 
     def get_vacancies_from_file(self, urls: list) -> list:
+        """Метод возвращает вакансии по ссылкам"""
+
         with open(os.path.join(DATA_DIR, self.__file_name), "r", encoding="utf-8") as file:
             data = json.load(file)
         result = []
@@ -56,5 +59,7 @@ class JSONSaver(BaseJSONSaver):
         return result
 
     def delete_vacancies(self):
+        """Метод удаляет все содержимое файла"""
+
         with open(os.path.join(DATA_DIR, self.__file_name), "w"):
             pass
